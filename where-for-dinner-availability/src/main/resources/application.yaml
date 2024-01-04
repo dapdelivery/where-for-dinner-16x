@@ -17,7 +17,7 @@ spring:
   
   cloud: 
     function:
-      definition: processAvailability;processDeletedSearch
+      definition: processAvailability  
     stream:
       defaultBinder: rabbit
       bindings: 
@@ -27,16 +27,7 @@ spring:
           consumer: 
             maxAttempts: 4
             backOffInitialInterval: 15000
-        processDeletedSearch-in-0: 
-          destination: where-for-dinner-search-deletion
-          group: where-for-dinner-search-result-group
-          consumer: 
-            maxAttempts: 4
-            backOffInitialInterval: 15000
-            backOffMaxInterval: 60000             
-
-  r2dbc: 
-    url: r2dbc:h2:mem:///testdb
+            backOffMaxInterval: 60000 
             
 springdoc:
   packages-to-scan: com.java.example.tanzu.wherefordinner.resources
@@ -93,15 +84,4 @@ management:
   health:
     rabbit:
       enabled: false     
-
----
-
-spring:
-  config.activate.on-profile: secure
-  
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://testservice.placeholder.com/test
           

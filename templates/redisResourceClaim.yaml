@@ -33,5 +33,6 @@ spec:
   classRef:
     name: #@ data.values.dynamicCacheClass
   parameters:
-    replicas: 1     
+    replicas: 1    
+    serviceNamespace: #@ data.values.serviceNamespace    
 #@ end

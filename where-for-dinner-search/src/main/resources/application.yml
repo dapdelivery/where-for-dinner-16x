@@ -28,11 +28,6 @@ spring:
       bindings: 
         submittedSearches-out-0: 
           destination: where-for-dinner-search-criteria
-        deletedSearches-out-0: 
-          destination: where-for-dinner-search-deletion
-
-  r2dbc: 
-    url: r2dbc:h2:mem:///testdb
 
 springdoc:
   packages-to-scan: com.java.example.tanzu.wherefordinner.resources
@@ -90,15 +85,4 @@ management:
   health:
     rabbit:
       enabled: false 
-      
----
-
-spring:
-  config.activate.on-profile: secure
-  
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://testservice.placeholder.com/test
           

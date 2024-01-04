@@ -2,7 +2,22 @@ package com.java.example.tanzu.wherefordinner.model;
 
 import java.util.List;
 
-public record SearchCriteria (String name, long startTime, long endTime, List<String> diningTypes, List<String> diningNames, String postalCode, int radius)
-{
+import lombok.Data;
 
+@Data
+public class SearchCriteria 
+{
+	private String name;	
+	
+	private long startTime;
+	
+	private long endTime;
+	
+	private List<String> diningTypes;
+	
+	private List<String> diningNames;
+	
+	private String postalCode;
+	
+	private int radius;
 }

@@ -3,14 +3,11 @@ package com.java.example.tanzu.wherefordinner.function;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.java.example.tanzu.wherefordinner.model.Availability;
-import com.java.example.tanzu.wherefordinner.model.Availability.AvailabilityWindow;
-import com.java.example.tanzu.wherefordinner.model.Search;
 import com.java.example.tanzu.wherefordinner.repository.AvailabilityRepository;
 import com.java.example.tanzu.wherefordinner.repository.AvailabilityWindowRepository;
 
@@ -30,7 +27,6 @@ public class AvailabilitySink
 
 	
 	@Bean
-	@RegisterReflectionForBinding({Availability.class, AvailabilityWindow.class})
 	public Function<Flux<Availability>, Mono<Void>> processAvailability()
 	{
 		return avails -> avails.flatMap(avail -> 
@@ -60,20 +56,6 @@ public class AvailabilitySink
 					});
 				
 			}).then();
-	}
-	
-	@Bean
-	public Function<Flux<Search>, Mono<Void>> processDeletedSearch()
-	{
-		return searches -> searches.flatMap(search ->
-		{
-			log.info("Deleting availability in search name \'{}\' for subject \'{}\'", search.getName(), search.getRequestSubject());
-			
-			return availRepo.findBySearchNameAndRequestSubject(search.getName(), search.getRequestSubject())
-			.map(avail -> avail.getId())
-			.collectList()
-			.flatMap(availIds -> availRepo.deleteAllById(availIds).then(availWinRepo.deleteByAvailabilityIdIn(availIds)));
-		}).then();
 	}
 	
 	protected Mono<Void> saveTimeWindows(Availability avail, com.java.example.tanzu.wherefordinner.entity.Availability savedAvail)

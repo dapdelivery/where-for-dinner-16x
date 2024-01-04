@@ -1,16 +1,6 @@
 #@ load("@ytt:data", "data")
 #@ load("@ytt:regexp", "regexp")
 
-#@ def buildServiceName():
-#@ serviceName = ""
-#@ if data.values.gatewayType == 'tapscg':
-#@ serviceName = data.values.gatewayName
-#@ else:
-#@ serviceName = "where-for-dinner"
-#@ end
-#@ return serviceName
-#@ end
-
 ---
 apiVersion: projectcontour.io/v1
 kind: HTTPProxy
@@ -24,5 +14,5 @@ spec:
     - conditions:
         - prefix: /
       services:
-        - name: #@ buildServiceName()
+        - name: #@ data.values.gatewayName
           port: 80

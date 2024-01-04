@@ -25,8 +25,11 @@ public class SearchResource
 			@RequestParam(name="diningTypes", required=false) List<String> diningTypes, 
 			@RequestParam(name="startTime", required=false) Long startTime, @RequestParam(name="endTime", required=false) Long endTime)
 	{
-		final var crit = new SearchCriteria("", startTime, endTime, diningTypes, diningNames, "", 0);
-
+		final var crit = new SearchCriteria();
+		crit.setDiningNames(diningNames);
+		crit.setDiningTypes(diningTypes);
+		crit.setStartTime(startTime);
+		crit.setEndTime(endTime);
 		
 		return randomSearcher.search(crit);
 	}

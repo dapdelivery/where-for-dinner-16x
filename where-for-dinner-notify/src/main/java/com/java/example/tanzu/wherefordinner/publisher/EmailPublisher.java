@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 
 import com.java.example.tanzu.wherefordinner.config.EmailMessageConfigProperties;
 import com.java.example.tanzu.wherefordinner.model.Availability;
-import com.java.example.tanzu.wherefordinner.model.AvailabilityWindow;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -51,19 +50,19 @@ public class EmailPublisher implements Publisher
 		
 		try
 		{
-			final var msgBuilder = new StringBuilder("Updated dining availability for ").append(avail.diningName());
-			if (avail.availabilityWindows().isEmpty())
+			final var msgBuilder = new StringBuilder("Updated dining availability for ").append(avail.getDiningName());
+			if (avail.getAvailabilityWindows().isEmpty())
 				msgBuilder.append("\tNo available dining times");
 			else
 			{
 				int cnt = 1;
-				for (AvailabilityWindow window : avail.availabilityWindows())
+				for (Availability.AvailabilityWindow window : avail.getAvailabilityWindows())
 				{
 					final var formatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault());
 					
 					
-					final var startTime = formatter.format(Date.from(Instant.ofEpochMilli(window.startTime())));
-					final var endTime = formatter.format(Date.from(Instant.ofEpochMilli(window.endTime())));
+					final var startTime = formatter.format(Date.from(Instant.ofEpochMilli(window.getStartTime())));
+					final var endTime = formatter.format(Date.from(Instant.ofEpochMilli(window.getEndTime())));
 					
 					msgBuilder.append("\r\n\t").append(cnt).append(". Window Start Time: ").append(startTime);
 					msgBuilder.append("\r\n\t").append(cnt).append(". Window End Time: ").append(endTime).append("\r\n");
@@ -76,8 +75,8 @@ public class EmailPublisher implements Publisher
 			message.setSubject(subject);
 			message.setText(msgBuilder.toString());
 			
-			if (StringUtils.hasText(avail.sendResultsTo()))
-				message.addRecipient(RecipientType.TO, new InternetAddress(avail.sendResultsTo()));
+			if (StringUtils.hasText(avail.getSendResultsTo()))
+				message.addRecipient(RecipientType.TO, new InternetAddress(avail.getSendResultsTo()));
 			else
 				for (String toRecip : to)
 					message.addRecipient(RecipientType.TO, new InternetAddress(toRecip));
